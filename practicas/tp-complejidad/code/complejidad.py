@@ -1,12 +1,14 @@
 import random
 
+#La estrategia utilizada es elegir como pivote al elemento del medio, para luego contar la cantidad de menores y mayores a
+#ese elemento que se encuentran en la lista, ademas de guardar los indices de estos. Luego intercambia menores con mayores en cada mitad de la lista en caso de ser necesario
+
 def middleList(L):
     menores = 0
     mayores = 0
     secondHalf = 1
     bool1 = True
     pivotI = len(L)//2
-    print(pivotI)
     indicesMay = []
     indicesMen = []
     for i in range(0, len(L)):
@@ -37,41 +39,48 @@ def middleList(L):
                 b = random.randint(0, secondHalf-1)
                 L[i], L[indicesMay[b]] = L[indicesMay[b]], L[i]
                 del indicesMay[b]
-        print(L)
 
+#El costo computacional de contiene_suma es de O(n log n) debido al merge sort que usamos para ordenar la lista
 
-        
+def Contiene_Suma(A,n):
+    def mergeSort(arr):
+        if len(arr) > 1:
+            mid = len(arr)//2
+            L = arr[:mid]
+            R = arr[mid:]
+            mergeSort(L)
+            mergeSort(R)
+            i = j = k = 0
 
-            
-        
+            while i < len(L) and j < len(R):
+                if L[i] < R[j]:
+                    arr[k] = L[i]
+                    i += 1
+                else:
+                    arr[k] = R[j]
+                    j += 1
+                k += 1
 
+            while i < len(L):
+                arr[k] = L[i]
+                i += 1
+                k += 1
 
-def partition(array, start, end):
-    pivot = array[start]
-    low = start + 1
-    high = end
-
+            while j < len(R):
+                arr[k] = R[j]
+                j += 1
+                k += 1
+    if len(A) < 2:
+        return False
+    mergeSort(A)
+    indexA = 0
+    indexB = len(A)-1
     while True:
-        while low <= high and array[high] >= pivot:
-            high = high - 1
-
-        while low <= high and array[low] <= pivot:
-            low = low + 1
-
-        if low <= high:
-            array[low], array[high] = array[high], array[low]
+        if indexA == indexB:
+            return False
+        if A[indexA] + A[indexB] > n:
+            indexB -=1
+        elif A[indexA] + A[indexB] < n:
+            indexA += 1
         else:
-            break
-
-    array[start], array[high] = array[high], array[start]
-
-    return high
-
-def quick_sort(array, start, end):
-    if start >= end:
-        return
-
-    p = partition(array, start, end)
-    quick_sort(array, start, p-1)
-    quick_sort(array, p+1, end)
-        
+            return True
