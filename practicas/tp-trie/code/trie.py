@@ -105,6 +105,48 @@ def delete(T, element):
             parent.children.remove(current)
             current = parent
 
+#Ejercicio 4
+
+def Prefix(T, p, n):
+
+    def searchEndOfPrefix(currentNode, index):
+        if currentNode.children == None:
+            return False
+        for child in currentNode.children:
+            if child.key == p[index]:
+                if len(p) == index+1:
+                    return child
+                index += 1
+                return searchEndOfPrefix(child, index)
+        return False
+
+    def findWords(currentNode, prefix, iter):
+        if currentNode.children == None:
+            if iter == n-len(p)+1:
+                words.append(prefix)
+            return
+        for child in currentNode.children:
+            if iter == n-len(p)+1:
+                if currentNode.isEndOfTheWord == True:
+                    words.append(prefix)
+                    return
+            if iter < n-len(p)+1:
+                findWords(child, prefix + child.key, iter+1)
+                
+                    
+    endPrefix = searchEndOfPrefix(T.root, 0)
+    if endPrefix == False:
+        print("No existen palabras que empiezen por", p)
+        return
+    words = []
+    findWords(endPrefix, p, 1)
+    if len(words) == 0:
+        print("No existen palabras que empiezen por", p, "de", n, "caracteres")
+        return
+    print("Las palabras encontradas son:")
+    for i in words:
+        print(i)
+
 #Otras funciones
 
 def _get_all_words(node, prefix, result):
