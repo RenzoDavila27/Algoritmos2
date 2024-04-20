@@ -102,7 +102,11 @@ def delete(T, element):
             if parent == T.root:
                 T.root.children.remove(current)
                 return True
-            parent.children.remove(current)
+            if len(parent.children) > 1:
+                parent.children.remove(current)
+                return True
+            else:
+                parent.children = None
             current = parent
 
 #Ejercicio 4
@@ -166,6 +170,34 @@ def DuplicatedTrie(T1, T2):
 
 #El costo computacional es de O(n logn) + O(m logm), siendo n y m la cantidad de palabras de T1 y T2 respectivamente 
 
+#Ejercicio 6
+
+def invertedWords(T):
+
+    def getWords(node, prefix):
+        if node.isEndOfTheWord:
+            return prefix
+        if node.children != None:
+            for child in node.children:
+                return getWords(child, prefix + child.key)
+        else: 
+            return 
+        
+    if T== None or T.root == None:
+        return False
+    
+    Tmodified = T
+
+    while True:
+        prefix = getWords(Tmodified.root, "", )
+        print(prefix)
+        delete(Tmodified, prefix)
+        print(get_all_words(Tmodified))
+        if search(T, prefix[::-1]):
+            return True
+        if len(Tmodified.root.children) == 0:
+            return False
+
 #Ejercicio 7
 
 def autoCompletar(T, cadena):
@@ -218,4 +250,3 @@ def get_all_words(trie):
     result = []
     _get_all_words(trie.root, "", result)
     return result
-
