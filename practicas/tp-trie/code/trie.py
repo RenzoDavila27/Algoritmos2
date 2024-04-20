@@ -147,6 +147,62 @@ def Prefix(T, p, n):
     for i in words:
         print(i)
 
+#Ejercicio 5
+
+def DuplicatedTrie(T1, T2):
+    if T1 == None and T2 == None:
+        return True
+    elif T1 == None or T2 == None:
+        return False
+    
+    a = get_all_words(T1)
+    b = get_all_words(T2)
+    
+    if len(a) == len(b):
+        if list.sort(a) == list.sort(b):
+            return True
+    
+    return False
+
+#El costo computacional es de O(n logn) + O(m logm), siendo n y m la cantidad de palabras de T1 y T2 respectivamente 
+
+#Ejercicio 7
+
+def autoCompletar(T, cadena):
+    
+    if T == None or T.root == None:
+        return ""
+
+    def searchEndOfPrefix(currentNode, index):
+        if currentNode.children == None:
+            return False
+        for child in currentNode.children:
+            if child.key == cadena[index]:
+                if len(cadena) == index+1:
+                    return child
+                index += 1
+                return searchEndOfPrefix(child, index)
+        return False
+
+    currentNode = searchEndOfPrefix(T.root, 0)
+    complement = ""
+    if currentNode == False or currentNode.children == None:
+        return complement
+    if len(currentNode.children) == 1:
+        currentNode = currentNode.children[0]
+    else: 
+        return complement
+    while True:
+        if currentNode.children == None:
+            return complement + currentNode.key
+        if len(currentNode.children) == 1:
+            if currentNode.isEndOfTheWord == True:
+                return complement + currentNode.key
+            complement = complement + currentNode.key
+            currentNode = currentNode.children[0]
+        else:
+            return complement + currentNode.key
+
 #Otras funciones
 
 def _get_all_words(node, prefix, result):
@@ -162,3 +218,4 @@ def get_all_words(trie):
     result = []
     _get_all_words(trie.root, "", result)
     return result
+
