@@ -2,35 +2,121 @@ class Trie:
     root = None
 
 class TrieNode:
-    children = []
+    children = None
     parent = None
     key = None
     isEndOfTheWord = False
 
-def display_trie(trie):
-    print("Palabras en el Trie:")
-    if trie != None and trie.root != None and trie.root.children[0] != None and trie.root.children[0].key != None:
-        _display_trie_helper(trie.root.children[0], "")
+#Ejercicio 1
+
+def insert(T, element):
+
+    def searchWord(CurrentChild, index):
+        if CurrentChild.children == None:
+            CurrentChild.children = []
+        for child in CurrentChild.children:
+                if child.key == element[index]:
+                    if len(element) == index+1:
+                        child.isEndOfTheWord = True
+                        return
+                    index += 1
+                    searchWord(child, index)
+                    return
+
+        insertCharacter(CurrentChild, index)
+    
+    def insertCharacter(currentNode, index):
+        newNode = TrieNode()
+        newNode.key = element[index]
+        newNode.parent = currentNode
+        currentNode.children.append(newNode)
+        if len(element) == index+1:
+            newNode.isEndOfTheWord = True
+            return
+        newNode.children = []
+        insertCharacter(newNode, index+1)
+
+    if T == None:
+        T = Trie()
+    if T.root == None:
+        node = TrieNode()
+        node.children = []
+        T.root = node
+    current = T.root
+    searchWord(current, 0)
+
+def search(T, element):
+
+    if T == None or T.root == None:
+        return False
+    
+    def searchR(currentNode, index):
+        if currentNode.children == None:
+            return False
+        for child in currentNode.children:
+            if child.key == element[index]:
+                if len(element) == index+1:
+                    if child.isEndOfTheWord == True:
+                        return True
+                    else:
+                        return False
+                index += 1
+                return searchR(child, index)
+        return False
+    
+    return searchR(T.root, 0)
+
+#Ejercicio 3
+
+def delete(T, element):
+    
+    def searchR(currentNode, index):
+        if currentNode.children == None:
+            return False
+        for child in currentNode.children:
+            if child.key == element[index]:
+                if len(element) == index+1:
+                    if child.isEndOfTheWord == True:
+                        return child
+                    else:
+                        return False
+                index += 1
+                return searchR(child, index)
+        return False
+
+    if T == None or T.root == None:
+        return False
+    
+    current = searchR(T.root, 0)
+    if current == False:
+        return False
     else:
-        return
+        if current.children != None:
+            current.isEndOfTheWord = False
+            return True
+        current.isEndOfTheWord = False
+        while True:
+            if current.isEndOfTheWord == True:
+                return True
+            parent = current.parent
+            if parent == T.root:
+                T.root.children.remove(current)
+                return True
+            parent.children.remove(current)
+            current = parent
 
-def _display_trie_helper(node, prefix):
+#Otras funciones
+
+def _get_all_words(node, prefix, result):
     if node.isEndOfTheWord:
-            print(prefix)
-            if len(node.children) != 0:
-                _display_trie_helper(node.children[0], prefix + node.key)
-            else: 
-                return
-    for i in range(0, len(node.children)+1):        
-        _display_trie_helper(node.children[i], prefix + node.key)
+        result.append(prefix)
+    if node.children != None:
+        for child in node.children:
+            _get_all_words(child, prefix + child.key, result)
+    else: 
+        return 
 
-T = Trie()
-A= TrieNode()
-A.children.append(TrieNode())
-A.children[0].key = "A"
-A.children[0].isEndOfTheWord = True
-A.children[0].parent = A
-T.root = 0
-
-
-display_trie(T)
+def get_all_words(trie):
+    result = []
+    _get_all_words(trie.root, "", result)
+    return result
