@@ -250,3 +250,11 @@ def get_all_words(trie):
     result = []
     _get_all_words(trie.root, "", result)
     return result
+
+T = Trie()
+insert(T, "dedos")
+insert(T, "deli")
+insert(T, "deseo")
+insert(T, "desod")
+print(get_all_words(T))
+Prefix(T, "de", 5)
