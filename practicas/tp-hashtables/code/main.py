@@ -60,6 +60,45 @@ def compresedString(string):
 
 #Ejercicio 8
 
+def searchOcurrences(s, p):
+    for i in range(0, len(s)):
+        if len(s) - i < len(p):
+           return None 
+        inicio = 0
+        if s[i] == p[inicio]:
+            inicio2 = i+1
+            inicio += 1
+            while True:
+                if s[inicio2] != p[inicio]:
+                    break
+                if inicio == len(p)-1:
+                    return i
+                inicio += 1
+                inicio2 += 1
+    return None
+                
+#Ejercicio 9
+
+def inclusionSets(T, S):
+    m = len(T)//2
+    D = [None] * m 
+    for i in T:
+        insert(D, i, i, m)
+    
+    for s in S:
+        if search(D, s, m) == None:
+            return False
+        
+    return True
+
+
+
+
+                
+
+
+
+
 
 
         
