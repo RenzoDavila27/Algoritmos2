@@ -1,15 +1,16 @@
+
 class Node:
     value = None
     key = None
 
 #Ejercicio 2
 
-def h(k):
-  return (k % 9)
+def h(k, n):
+  return (k % n)
 
-def insert(D, key, value):
-    if search(D, key) == None:
-        index = h(key)
+def insert(D, key, value, m):
+    if search(D, key, m) == None:
+        index = h(key, m)
         typeDate = type(D[index])
         N = Node()
         N.value = value
@@ -23,8 +24,8 @@ def insert(D, key, value):
             D[index] = L
     return D
 
-def search(D, key):
-    index = h(key)
+def search(D, key, m):
+    index = h(key, m)
     inicio = D[index]
     if type(inicio) == Node:
         if inicio.key == key:
@@ -35,9 +36,9 @@ def search(D, key):
                 return i.value
     return None
         
-def delete(D, key):
+def delete(D, key, m):
     if search(D, key) != None:
-        index = h(key)
+        index = h(key, m)
         data = D[index]
         if type(data) == Node:
             D[index] = None
@@ -48,9 +49,6 @@ def delete(D, key):
                     data.pop(iter)
                 iter += 1
     return D
-        
-
-
 
 #Otras funciones
 
@@ -67,4 +65,3 @@ def showDictionary(D):
         else:
             print(f"{iter}: {i}")
         iter += 1
-                
