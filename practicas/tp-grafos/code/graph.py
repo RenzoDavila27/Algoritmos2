@@ -44,7 +44,7 @@ def isConnected(graph):
 
         for adjunt in graph[vert]:
             if adjunt not in vertsTraveled:
-                queue.append(adjunt)
+                queue.insert(0,adjunt)
     
     return len(vertsTraveled) == len(graph)
     
@@ -75,8 +75,100 @@ def isTree(graph):
     
     return (isConnected(graph) and isAcyclic(graph))
 
+#Ejercicio 5:
+def isCompleted(graph): #Suponiendo que grafo completo no puede tener lazos
+    for v in graph.keys():
+        if set(graph[v]) != set(graph.keys()) - set([v]):
+            return False
+    return True
+
+#Ejercicio 6
+def convertTree(graph):
+
+    def DFSMod(graph):
+
+        def dfsTravel(v, f):
+            visited.add(v)
+            for adjunt in graph[v]:
+                if adjunt not in visited:
+                    if not dfsTravel(adjunt, v):
+                        deletedEdges.append([v,adjunt])
+                else:
+                    if adjunt != f and [adjunt,v] not in deletedEdges:
+                        deletedEdges.append([v,adjunt])
+            return True
+        
+        visited = set()
+        first = next(iter(graph.keys()))
+        deletedEdges = []
+        visited.add(first)
+        dfsTravel(first, None)
+
+        return deletedEdges
+
+    return DFSMod(graph)
+
+#Ejercicio 7
+def countConnections(graph):
+
+    def dfsTravel(v):
+        visited.append(v)
+        for adjunt in graph[v]:
+            if adjunt not in visited:
+                return dfsTravel(adjunt)
+            else:
+                continue
+
+    visited = []
+    compConexas = 0
+    for v in graph.keys():
+        if v not in visited:
+            dfsTravel(v)
+            compConexas +=1
+    return compConexas
+
+#Ejercicio 8
+def convertToBFSTree(graph, v):
+
+    newGraph = {}
+    for vertex in graph.keys():
+        newGraph[vertex] = []
 
 
+    queue = [v]
+    visited = set()
+    visited.add(v)
+    
+    while len(queue) != 0:
+        vert = queue.pop()
+        for adjunt in graph[vert]:
+            if adjunt not in visited:
+                queue.insert(0, adjunt)
+                visited.add(adjunt)
+                newGraph[vert].append(adjunt)
+                newGraph[adjunt].append(vert)
+    
+    return newGraph
+
+#Ejercicio 9
+def convertToDFSTree(graph, v):
+
+    def DFSTravel(vertex):
+
+        for adjunt in graph[vertex]:
+            if adjunt not in visited:
+                visited.add(adjunt)
+                DFSTravel(adjunt)
+                newGraph[vertex].append(adjunt)
+                newGraph[adjunt].append(vertex)
+            
+    newGraph = {}
+    for vert in graph.keys():
+        newGraph[vert] = []
+
+    visited = set()
+    DFSTravel(v)
+    return newGraph
 
 
 
