@@ -170,6 +170,142 @@ def convertToDFSTree(graph, v):
     DFSTravel(v)
     return newGraph
 
+#Ejercicio 10
+def bestRoad(graph, v1, v2):
+
+    def BFSMod(graph):
+
+        padres = {v1 : None}
+        queue = [v1]
+        visited = set(queue)
+
+        while len(queue) != 0:
+            v = queue.pop()
+            for adjunt in graph[v]:
+                if adjunt not in visited:
+                    visited.add(adjunt)
+                    padres[adjunt] = v
+                    queue.insert(0, adjunt)
+                    if adjunt == v2:
+                        return padres
+        return []
+    
+    result = BFSMod(graph)
+
+    if result == []:
+        return []
+    else:
+        road = [v2]
+        padre = result[v2]
+        while padre != None:
+            road.insert(0, padre)
+            padre = result[padre]
+        return road
+    
+#Ejercicio 14
+def PRIM(graph):
+
+    n = len(graph)
+    AACM = [[0 for i in range(n)] for j in range(n)]
+    t = {}
+    V = set([0] + [t for t in range(1,n)])
+    U = set([0])
+    edgesAvaibles = [(0,c) for c in range(n)]
+
+    while V != U:
+        a = edgesAvaibles[0][0]
+        b = edgesAvaibles[0][1]
+        menor = max(graph[a])
+        if menor == 0:
+            return None
+        
+        bool = False
+
+        
+        for x,y in edgesAvaibles:
+            if graph[x][y] < menor and graph[x][y] != 0:
+                menor = graph[x][y]
+                a = x
+                b = y
+        
+
+        t[(a,b)] = menor
+        
+        for p in range(n):
+            if (p,b) not in edgesAvaibles and p in V-U:
+                edgesAvaibles.append((b,p))
+                bool = True
+
+        edgesAvaibles.remove(((a,b)))
+        for i in range(n):
+            try:
+                edgesAvaibles.remove((i,b))
+            except:
+                continue
+
+        if bool:
+            U.add(b)
+    
+    for edge in t.keys():
+        AACM[edge[0]][edge[1]] = t[edge]
+        AACM[edge[1]][edge[0]] = t[edge]
+
+    return AACM
+    
+#Ejercicio 15
+def KRUSKAL(graph):
+
+    def makeSet(x):
+        return set([x])
+
+    def findSet(x):
+        return forest[x]
+    
+    def union(x,y):
+
+        result = forest[x] | forest[y] 
+
+        for element in result:
+            forest[element] = result
+
+    forest = {}
+    edges = []
+    n = len(graph)
+    AACM = [[0 for i in range(n)] for j in range(n)]
+
+    for i in range(n):
+        forest[i] = makeSet(i)
+
+    for i in range(n):
+        for j in range(n):
+            if graph[i][j] != 0 and (graph[j][i],j,i) not in edges:
+                edges.append((graph[i][j],i,j))
+            
+    edges.sort(key=lambda x:x[0])
+    
+    for edge in edges:
+        if findSet(edge[1]) != findSet(edge[2]):
+            union(edge[1], edge[2])
+            AACM[edge[1]][edge[2]] = edge[0]
+            AACM[edge[2]][edge[1]] = edge[0]
+
+    return AACM
+
+
+v = [1,2,3,4,5]
+v2 = [1,2,3,4]
+a3 = [[1,2], [2,3], [3,1], [1,4], [2,4]]
+a = [[1,2],[1,5],[5,2],[2,4],[4,5],[2,3],[4,3]]
+a2 = [[1,2],[1,5],[5,2],[2,4],[4,5]]
+
+M = [[0,6,1,5,0,0],[6,0,5,0,3,0],[1,5,0,5,6,4],[5,0,5,0,0,2],[0,3,6,0,0,6],[0,0,4,2,6,0]]
+
+print(KRUSKAL(M))
+
+
+
+
+
 
 
 
