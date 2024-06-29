@@ -1,3 +1,5 @@
+import heapq #Para usar colas con prioridad
+
 
 #Ejercicio 1
 def CreateGraph(v, a):
@@ -291,16 +293,56 @@ def KRUSKAL(graph):
 
     return AACM
 
+#Ejercicio 21
+def Dijkstra(graph, s, v):
 
-v = [1,2,3,4,5]
-v2 = [1,2,3,4]
-a3 = [[1,2], [2,3], [3,1], [1,4], [2,4]]
-a = [[1,2],[1,5],[5,2],[2,4],[4,5],[2,3],[4,3]]
-a2 = [[1,2],[1,5],[5,2],[2,4],[4,5]]
+    def relax(u,v):
+        if distancia[v] > distancia[u] + graph[u][v]:
+            distancia[v] = distancia[u] + graph[u][v]
+            padres[v] = u
+    
+    def initRelax():
+        for i in range(len(graph)):
+            if i != s:
+                distancia[i] = float('inf')
+            else:
+                distancia[i] = 0
+            padres[i] = None
 
-M = [[0,6,1,5,0,0],[6,0,5,0,3,0],[1,5,0,5,6,4],[5,0,5,0,0,2],[0,3,6,0,0,6],[0,0,4,2,6,0]]
+    padres = {}
+    distancia = {}
+    visited = set([s])
+    initRelax()
+    priorityQ = []
+    heapq.heappush(priorityQ, (distancia[s],s))
+    
+    bool = False
 
-print(KRUSKAL(M))
+    while len(priorityQ) > 0:
+        u = heapq.heappop(priorityQ)
+        print(u)
+        visited.add(u[1])
+        if u[1] == v:
+            bool = True
+            break
+
+        for i in range(len(graph)):
+            if graph[u[1]][i] != 0 and i not in visited:
+                relax(u[1], i) 
+                if not any(segundo == i for _, segundo in priorityQ):
+                    heapq.heappush(priorityQ, (distancia[i], i))
+            
+    if not bool:
+        return None
+    
+    padre = padres[v]
+    finalRoad = [v]
+    while padre != None:
+        finalRoad = [padre] + finalRoad
+        padre = padres[padre]
+        
+
+    return finalRoad
 
 
 
