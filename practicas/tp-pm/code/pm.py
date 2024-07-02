@@ -187,5 +187,3 @@ def KMPMod(T,P):
     return finalArray
 p = "aa"
 a = "aabababaaa"
-
-print(KMPMod(a,p))
