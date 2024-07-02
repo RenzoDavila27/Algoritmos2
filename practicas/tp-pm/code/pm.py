@@ -185,5 +185,3 @@ def KMPMod(T,P):
     if len(finalArray) == 0:
         return None
     return finalArray
-p = "aa"
-a = "aabababaaa"
